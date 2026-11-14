@@ -9,12 +9,16 @@ const json = (body: unknown, status = 200) => new Response(JSON.stringify(body),
   headers: { 'content-type': 'application/json', 'cache-control': 'private, max-age=600' },
 });
 
+// local development has no Vercel geo headers, so `next dev` shows this instead of the clock fallback
+const DEV_MOCK = { city: 'Valencia', country: 'ES', temp: 20, code: 0, day: false }; // 20°, clear sky, night
+
 export async function GET(req: Request) {
   const h = req.headers;
   const lat = parseFloat(h.get('x-vercel-ip-latitude') ?? '');
   const lon = parseFloat(h.get('x-vercel-ip-longitude') ?? '');
   const city = decodeURIComponent(h.get('x-vercel-ip-city') || '');
   const country = h.get('x-vercel-ip-country') || '';
+  if (process.env.NODE_ENV === 'development' && !h.get('x-vercel-ip-latitude')) return json(DEV_MOCK);
   // no location (local dev, or a visitor Vercel can't place): the page falls back to the visitor's own clock
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) return new Response(null, { status: 204, headers: { 'cache-control': 'private, max-age=600' } });
   try {

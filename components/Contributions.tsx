@@ -2,7 +2,7 @@
 
 /* GitHub contributions, one square per day. Live data comes from /api/commits (the token stays on the server; set
    GITHUB_USER and optionally GITHUB_TOKEN). If that isn't reachable it asks the public calendar at
-   github-contributions-api.jogruber.de directly. Shows the last four calendar years in one strip.
+   github-contributions-api.jogruber.de directly. Shows the last two calendar years in one strip.
    Until data arrives empty years are drawn. */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { GH_USER } from '@/lib/content';
@@ -10,7 +10,7 @@ import SectionHead from './SectionHead';
 
 type Day = { date: string; count: number; level: number };
 
-const YEARS = 4;
+const YEARS = 2;
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 const thisYear = () => new Date().getFullYear();
 const firstYear = () => thisYear() - YEARS + 1;

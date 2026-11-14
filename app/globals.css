@@ -34,7 +34,7 @@ body {
   overflow-x: hidden;
   position: relative;
 }
-/* paper: soft light falloff + fine tooth, fixed behind everything */
+/* paper: soft light falloff, fibers and specks (public/paper-fibers.svg), and a fine tooth, fixed behind everything */
 body::before,
 body::after {
   content: "";
@@ -45,6 +45,7 @@ body::after {
 }
 body::before {
   background:
+    url("/paper-fibers.svg") 0 0 / 720px 720px,
     radial-gradient(
       110% 90% at 35% 25%,
       rgba(255, 255, 255, 0.22),
@@ -57,7 +58,7 @@ body::before {
     );
 }
 body::after {
-  opacity: 0.6;
+  opacity: 0.7;
   mix-blend-mode: multiply;
   background-image: var(--tooth);
 }
@@ -160,6 +161,7 @@ header.bar::after {
 }
 header.bar::before {
   background:
+    url("/paper-fibers.svg") 0 0 / 720px 720px,
     radial-gradient(
       110% 90% at 35% 25%,
       rgba(255, 255, 255, 0.22),
@@ -174,7 +176,7 @@ header.bar::before {
   background-attachment: fixed;
 }
 header.bar::after {
-  opacity: 0.6;
+  opacity: 0.7;
   mix-blend-mode: multiply;
   background-image: var(--tooth);
 }
@@ -679,11 +681,14 @@ footer a:hover {
   grid-auto-columns: auto;
   gap: 1px;
 }
+.gh-grid--strip {
+  --cell-ratio: 1 / 1.618; /* width / height of a day: golden-ratio bars make the whole chart a deeper block instead of a thin strip */
+}
 .gh-grid--strip i {
   width: auto;
   height: auto;
-  aspect-ratio: 1;
-  border-radius: 1px;
+  aspect-ratio: var(--cell-ratio);
+  border-radius: 1.5px;
 }
 .gh-grid i:hover {
   outline: 1.5px solid var(--ink);
@@ -708,6 +713,12 @@ footer a:hover {
   gap: 4px;
   justify-content: flex-end;
   --cell: 11px;
+}
+/* legend swatches take the same tall shape as the days */
+.gh:has(.gh-grid--strip) .gh-legend i {
+  width: 8px; /* 8 × 13: Fibonacci neighbours, the same golden shape */
+  height: 13px;
+  border-radius: 1.5px;
 }
 .gh-legend span {
   margin-inline: 4px;

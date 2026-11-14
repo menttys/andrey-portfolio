@@ -1,5 +1,5 @@
 // GET /api/commits
-// Returns GitHub contributions for the last 4 calendar years (YEARS below) (Jan 1 of the oldest one up to today) as
+// Returns GitHub contributions for the last 2 calendar years (YEARS below) (Jan 1 of the oldest one up to today) as
 // { user, total, contributions: [{ date, count, level }] }, the shape the Contributions section draws (one row per year).
 //
 // Environment variables (Vercel → Project → Settings → Environment Variables, or .env.local in development):
@@ -15,7 +15,7 @@ type Day = { date: string; count: number; level: number };
 type Result = { total: number; contributions: Day[]; source: 'github' | 'public' };
 
 const LEVEL: Record<string, number> = { NONE: 0, FIRST_QUARTILE: 1, SECOND_QUARTILE: 2, THIRD_QUARTILE: 3, FOURTH_QUARTILE: 4 };
-const YEARS = 4;
+const YEARS = 2;
 const years = () => { const y = new Date().getUTCFullYear(); return Array.from({ length: YEARS }, (_, i) => y - YEARS + 1 + i); };
 const today = () => new Date().toISOString().slice(0, 10);
 // both sources hand back whole calendar years; drop the days that haven't happened yet
