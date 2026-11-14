@@ -1,0 +1,766 @@
+/* Layout: grey paper page. Hero = the two devices as a top-down still, then a wide headline, intro row, work index, contact.
+   Palette is sampled from the devices: paper grey, screen ink, signal orange, olive, lime. */
+:root {
+  --paper: #d8d8d7;
+  --ink: #0b0c10;
+  --fog: #b3b3b2;
+  --graphite: #6f7072;
+  --line: #c4c4c3;
+  --orange: #c8552f;
+  --olive: #8c9f33;
+  --lime: #d6e24a;
+  --slate: #2a2d38;
+  --accent: var(--orange);
+  --display: "Unbounded", "Arial Black", Arial, sans-serif;
+  --body: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --maxw: 1440px; /* content column (devices, headline and header scale with it); the paper still runs edge to edge */
+  --gut: max(16px, min(4.5vw, 72px));
+  --tooth: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch' seed='8'/><feColorMatrix values='0 0 0 0 0.45  0 0 0 0 0.45  0 0 0 0 0.45  0 0 0 0.62 -0.14'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  color-scheme: light;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  position: relative;
+}
+/* paper: soft light falloff + fine tooth, fixed behind everything */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+body::before {
+  background:
+    radial-gradient(
+      110% 90% at 35% 25%,
+      rgba(255, 255, 255, 0.22),
+      transparent 60%
+    ),
+    radial-gradient(
+      130% 100% at 50% 50%,
+      transparent 60%,
+      rgba(0, 0, 0, 0.07) 100%
+    );
+}
+body::after {
+  opacity: 0.6;
+  mix-blend-mode: multiply;
+  background-image: var(--tooth);
+}
+/* --wght is set by the lower knob on the green unit: the weight of every display line, Unbounded's full 200 to 900 range */
+:root {
+  --wght: 600;
+}
+.headline,
+.index-head h2,
+.row .num,
+.contact .big,
+.gh-num {
+  font-weight: var(--wght) !important;
+  transition: font-weight 0.22s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .headline,
+  .index-head h2,
+  .row .num,
+  .contact .big,
+  .gh-num {
+    transition: none;
+  }
+}
+header,
+main {
+  position: relative;
+  z-index: 1;
+}
+/* paper tint, set by the top knob on the green unit: each new tone floods out from the knob, under the paper's light and tooth */
+@property --paper {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #d8d8d7;
+}
+:root {
+  transition: --paper 1.4s cubic-bezier(0.3, 0.6, 0.2, 1);
+}
+.wash {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.wash i {
+  position: absolute;
+  inset: 0;
+  clip-path: circle(0px at var(--x) var(--y));
+  transition: clip-path 1.4s cubic-bezier(0.3, 0.6, 0.2, 1);
+}
+.wash i.on {
+  clip-path: circle(var(--r) at var(--x) var(--y));
+}
+@media (prefers-reduced-motion: reduce) {
+  :root,
+  .wash i {
+    transition-duration: 0.01s;
+  }
+}
+/* The page scrolls normally. The first knob on the grey unit slides only the content (.flow) up, under the devices and
+   their shadow and then under the header, while the header and the devices stay where they are. */
+header.bar {
+  z-index: 3;
+}
+/* the grey unit's brightness knob also dims (or lifts) the whole page: one fixed veil over everything, ignoring the pointer */
+#dim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  background: #000;
+  opacity: 0;
+  transition: opacity 0.12s linear;
+}
+#dim.up {
+  background: #fff;
+}
+@media (prefers-reduced-motion: reduce) {
+  #dim {
+    transition: none;
+  }
+}
+.flow {
+  position: relative;
+  z-index: 1;
+}
+/* a band of the same paper (light falloff and tooth, fixed to the viewport like the page's) so text fades out under the header */
+header.bar::before,
+header.bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  height: calc(100% + 40px);
+  left: calc(50% - 50vw);
+  width: 100vw;
+  z-index: -1;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(#000 58%, transparent);
+  mask-image: linear-gradient(#000 58%, transparent);
+}
+header.bar::before {
+  background:
+    radial-gradient(
+      110% 90% at 35% 25%,
+      rgba(255, 255, 255, 0.22),
+      transparent 60%
+    ),
+    radial-gradient(
+      130% 100% at 50% 50%,
+      transparent 60%,
+      rgba(0, 0, 0, 0.07) 100%
+    ),
+    var(--paper);
+  background-attachment: fixed;
+}
+header.bar::after {
+  opacity: 0.6;
+  mix-blend-mode: multiply;
+  background-image: var(--tooth);
+}
+.wrap {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-left: max(var(--gut), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gut), env(safe-area-inset-right, 0px));
+}
+.mono {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--graphite);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 26px 0;
+}
+.logo {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+}
+.logo sup {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  margin-left: 2px;
+}
+.bar .mono.center {
+  flex: 1;
+  text-align: center;
+}
+/* printed on the paper like the captions under the devices: same mono, sentence case, 2px tracking and grey ink,
+   multiplied into the paper so the grain shows through, with a hair of ink spread on the edges of the letters */
+.bar .mono.center {
+  text-transform: none;
+  letter-spacing: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(150, 150, 150, 0.88);
+  mix-blend-mode: multiply;
+  text-shadow: 0 0 0.6px rgba(110, 110, 110, 0.35);
+}
+/* the header caption is drawn by the same routine as the captions under the devices and shown at the same size on
+   screen, so its letters soften exactly as theirs do; the text above is only the fallback before it draws */
+.bar .mono.center {
+  line-height: 0;
+  mix-blend-mode: normal;
+  text-shadow: none;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+#topcap {
+  display: inline-block;
+  width: 0;
+  height: 0;
+}
+.menu {
+  width: 28px;
+  height: 28px;
+  display: block;
+  pointer-events: none;
+  color: #e0683c;
+}
+/* a press registration mark printed in the same orange as the device's SYSTEM LOADING text: a ring with a cross through it, not a control */
+.menu svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+/* "open to work": a small status unit in the same cast concrete as the grey device, sitting on the paper at the end
+   of the intro row, where the tag used to be. It only reports a status, so it takes no pointer and shows no hover. */
+.otw {
+  position: relative;
+  width: 132px;
+  height: 30px;
+  flex: none;
+  align-self: start;
+  margin-top: 6px;
+  pointer-events: none;
+}
+.otw canvas {
+  position: absolute;
+  left: -22px;
+  top: -26px;
+  width: 196px;
+  height: 100px;
+  display: block;
+  pointer-events: none;
+  /* the shadow's tail is faded out before the canvas edge, so no box ever shows on the paper */
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 62%, transparent 98%),
+    linear-gradient(to right, #000 78%, transparent 99%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, #000 62%, transparent 98%),
+    linear-gradient(to right, #000 78%, transparent 99%);
+  mask-composite: intersect;
+}
+@media (max-width: 760px) {
+  .otw {
+    width: 112px;
+    height: 26px;
+    margin-top: 10px;
+  }
+  .otw canvas {
+    left: -19px;
+    top: -22px;
+    width: 166px;
+    height: 86px;
+  }
+}
+.go:focus-visible,
+.row:focus-visible,
+.copy:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 4px;
+}
+
+/* hero still life */
+/* the canvas runs on below the stage so the devices' shadow fades out over the headline instead of stopping at an edge */
+.hero {
+  container-type: inline-size;
+}
+.pin {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+.stage {
+  position: relative;
+  aspect-ratio: 2.1 / 1;
+  margin: 0 calc(-1 * var(--gut));
+  pointer-events: none;
+}
+#gl {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 160%;
+  display: block;
+  pointer-events: none;
+}
+.stage.knob-hover {
+  cursor: grab;
+}
+html.knob-drag,
+html.knob-drag * {
+  cursor: grabbing !important;
+  user-select: none;
+}
+
+.headline {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: max(38px, 9cqi); /* scales with the content column */
+  position: relative;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+  margin-top: clamp(-30px, -2vw, -8px);
+}
+.headline .w {
+  color: var(--fog);
+}
+.headline .w.first {
+  color: var(--ink);
+}
+
+.intro {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 330px) 1fr auto;
+  gap: 22px;
+  align-items: start;
+  padding-block: 36px 0;
+}
+.go {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 0;
+  cursor: pointer;
+  background: var(--orange);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.go:hover {
+  transform: rotate(-45deg) scale(1.06);
+}
+.go svg {
+  width: 22px;
+  height: 22px;
+}
+.intro p {
+  margin: 0;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+.intro .meta {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  padding-top: 4px;
+}
+.chip {
+  align-self: start;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 999px;
+  padding: 9px 16px;
+  font: 500 11px var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.chip i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lime);
+}
+
+/* work index */
+.index {
+  padding-block: 10vw 4vw;
+}
+.index-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 18px;
+  flex-wrap: wrap;
+}
+.index-head > .mono.inked {
+  line-height: 0;
+  margin-right: -1px;
+}
+.index-head > .mono.inked canvas {
+  display: block;
+}
+.index-head h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(26px, 3.4vw, 48px);
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  line-height: 1;
+}
+.row {
+  --c: var(--orange);
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) minmax(0, 0.7fr);
+  align-items: center;
+  gap: 24px;
+  padding-block: 22px;
+  border-bottom: 1px solid var(--line);
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.num {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(64px, 11vw, 176px);
+  line-height: 0.85;
+  letter-spacing: -0.07em;
+  color: var(--fog);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.row:hover .num,
+.row:focus-visible .num {
+  color: var(--c);
+}
+.row h3 {
+  margin: 0 0 6px;
+  font-size: clamp(22px, 2.2vw, 32px);
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  line-height: 1.1;
+}
+.row p {
+  margin: 0;
+  color: var(--graphite);
+  font-size: 16px;
+  max-width: 42ch;
+}
+.meta {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.contact {
+  padding-block: 6vw 40px;
+}
+.contact .big {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(26px, 6vw, 104px);
+  letter-spacing: -0.05em;
+  line-height: 1;
+  margin: 14px 0 28px;
+  overflow-wrap: anywhere;
+}
+.contact .big span {
+  color: var(--fog);
+}
+.copy {
+  font: 500 12px var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--paper);
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 20px;
+  cursor: pointer;
+}
+footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-block: 48px 32px;
+  border-top: 1px solid var(--line);
+  margin-top: 6vw;
+}
+
+/* experience + skills: same rules and type as the work index, no numerals */
+.cv {
+  padding-block: 4vw;
+}
+.job {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) minmax(0, 0.7fr);
+  gap: 24px;
+  align-items: start;
+  padding-block: 22px;
+  border-bottom: 1px solid var(--line);
+}
+.job h3,
+.skill h3 {
+  margin: 0 0 6px;
+  font-size: clamp(22px, 2.2vw, 32px);
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  line-height: 1.1;
+}
+.job p,
+.skill p {
+  margin: 0;
+  color: var(--graphite);
+  font-size: 16px;
+  max-width: 46ch;
+}
+.job .mono {
+  padding-top: 8px;
+}
+.job.quiet h3 {
+  color: var(--graphite);
+}
+.skills {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  padding-block: 28px;
+}
+.skill .mono {
+  display: block;
+  margin-bottom: 12px;
+}
+.contact a.mono,
+footer a {
+  color: inherit;
+  text-decoration: none;
+}
+footer a:hover {
+  color: var(--ink);
+}
+.social {
+  display: flex;
+  gap: 22px;
+}
+.social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--graphite);
+  transition: color 0.3s;
+}
+.social a:hover {
+  color: var(--ink);
+}
+.social svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+@media (max-width: 1000px) {
+  .skills {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* github contributions: one square per day, palette from the devices */
+.gh {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: 24px 40px;
+  align-items: end;
+  padding-block: 28px 8px;
+}
+.gh-total {
+  display: grid;
+  gap: 6px;
+}
+.gh-num {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(48px, 5vw, 80px);
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+}
+#gh-handle {
+  color: var(--graphite);
+  text-decoration: none;
+}
+#gh-handle:hover {
+  color: var(--ink);
+}
+.gh-scroll {
+  justify-self: end;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  min-width: 0;
+}
+/* four years in one strip: a column per week, cells shrink to fit the width (never below 3px, then it scrolls) */
+.gh-scroll:has(.gh-strip) {
+  justify-self: stretch;
+}
+.gh-strip {
+  min-width: calc(var(--cols) * 4px);
+}
+.gh-years {
+  position: relative;
+  height: 30px;
+  font-size: 10px;
+  line-height: 1.2;
+}
+.gh-years span {
+  position: absolute;
+  top: 0;
+  display: grid;
+  padding-left: 6px;
+  border-left: 1px solid rgba(11, 12, 16, 0.25);
+}
+.gh-years em {
+  font-style: normal;
+  color: var(--graphite);
+}
+.gh-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, var(--cell));
+  grid-auto-columns: var(--cell);
+  gap: 3px;
+  --cell: max(9px, min(0.95vw, 15px));
+}
+.gh-grid i,
+.gh-legend i {
+  display: block;
+  width: var(--cell, 11px);
+  height: var(--cell, 11px);
+  border-radius: 3px;
+  background: rgba(11, 12, 16, 0.07);
+}
+.gh-grid--strip {
+  grid-template-rows: repeat(7, auto);
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  grid-auto-columns: auto;
+  gap: 1px;
+}
+.gh-grid--strip i {
+  width: auto;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 1px;
+}
+.gh-grid i:hover {
+  outline: 1.5px solid var(--ink);
+  outline-offset: 1px;
+}
+.l1 {
+  background: #d6e24a !important;
+}
+.l2 {
+  background: #b4c233 !important;
+}
+.l3 {
+  background: #8c9f33 !important;
+}
+.l4 {
+  background: #2a2d38 !important;
+}
+.gh-legend {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+  --cell: 11px;
+}
+.gh-legend span {
+  margin-inline: 4px;
+}
+@media (max-width: 760px) {
+  .gh {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .gh-legend {
+    grid-column: 1;
+  }
+}
+@media (max-width: 760px) {
+  .job {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .job .mono {
+    padding-top: 0;
+  }
+  .skills {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .bar .mono.center {
+    display: none;
+  }
+  .stage {
+    aspect-ratio: 1.5 / 1;
+  }
+  .intro {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+  .intro .meta,
+  .intro .chip,
+  .intro .otw {
+    grid-column: 2;
+  }
+  .row {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px 18px;
+  }
+  .row .meta {
+    grid-column: 2;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .go {
+    transition: none;
+  }
+}
+.index-head > .mono.inked > .ink-src {
+  display: none;
+}
