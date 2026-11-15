@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import PaperMotion from '@/components/PaperMotion';
 
 export const metadata: Metadata = {
   title: 'Andrey Portfolio',
@@ -23,7 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
         />
       </head>
-      <body>{children}</body>
+      
+      <body suppressHydrationWarning>
+        {children}
+        <PaperMotion />
+      </body>
     </html>
   );
 }
