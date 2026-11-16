@@ -3,7 +3,7 @@ export default function Header() {
     <header className="wrap bar">
       <div className="logo">Andrey<sup>®</sup></div>
       {/* the weather / greeting line; drawn into the canvas by the scene, the label is kept in step for screen readers */}
-      <div className="mono center" role="img" aria-label="Portfolio, 11.26">
+      <div className="mono center" role="img" aria-label="Greeting">
         <canvas id="topcap" aria-hidden="true" />
       </div>
       <div className="menu" aria-hidden="true">

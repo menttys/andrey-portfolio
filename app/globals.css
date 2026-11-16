@@ -334,6 +334,85 @@ header.bar::after {
 .stage.knob-hover {
   cursor: grab;
 }
+
+/* Phones: one unit at a time (lib/scene/units.js). The scene sets data-units="one" on the stage while it runs at this
+   width, so the buttons never show over the still image. The stage gets taller to make room for them under the unit. */
+.unit-switch {
+  display: none;
+}
+@media (max-width: 760px) {
+  .stage[data-units="one"] {
+    aspect-ratio: 1.12 / 1;
+  }
+  .stage[data-units="one"] .unit-switch {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    z-index: 1;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 999px;
+    /* solid, in the paper's own tone a shade down, so a section sliding up behind it never shows through */
+    background: #cdcdcc;
+    background: color-mix(in srgb, var(--ink) 6%, var(--paper));
+    pointer-events: auto;
+  }
+  .unit-switch button {
+    min-height: 48px;
+    min-width: 132px;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--graphite);
+    font: 500 12px var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  .unit-switch button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .unit-switch button:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 2px;
+  }
+  .unit-switch .swatch {
+    width: 12px;
+    height: 12px;
+    flex: none;
+    border-radius: 4px;
+  }
+  /* the units' own colours: concrete in its tan rim, olive resin in its pale rim */
+  .unit-switch .swatch.grey {
+    background: #b4b4b3;
+    box-shadow: 0 0 0 2px #d9a77c;
+  }
+  .unit-switch .swatch.green {
+    background: #445219;
+    box-shadow: 0 0 0 2px #d3d8c9;
+  }
+  /* the proof layer's printed slug down the left edge (#slug in the proof-layer prototype) is left off on phones */
+  #proof #slug {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .unit-switch button {
+    transition: none;
+  }
+}
 html.knob-drag,
 html.knob-drag * {
   cursor: grabbing !important;
