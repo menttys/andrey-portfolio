@@ -10,8 +10,6 @@
 .proof .crop::before, .proof .crop::after { content: ''; position: absolute; background: var(--ink); }
 .proof .crop::before { width: 20px; height: 0.8px; }   /* horizontal */
 .proof .crop::after { width: 0.8px; height: 20px; }    /* vertical */
-.proof .crop.tl { left: 8px; top: 8px; }   .proof .crop.tl::before { top: 40px; left: 0; } .proof .crop.tl::after { left: 40px; top: 0; }
-.proof .crop.tr { right: 8px; top: 8px; }  .proof .crop.tr::before { top: 40px; right: 0; } .proof .crop.tr::after { right: 40px; top: 0; }
 .proof .crop.bl { left: 8px; bottom: 8px; } .proof .crop.bl::before { bottom: 40px; left: 0; } .proof .crop.bl::after { left: 40px; bottom: 0; }
 .proof .crop.br { right: 8px; bottom: 8px; } .proof .crop.br::before { bottom: 40px; right: 0; } .proof .crop.br::after { right: 40px; bottom: 0; }
 .proof .crop { overflow: visible; }
@@ -40,9 +38,9 @@
 .proof-stet.h { right: var(--proof-stet-right, 190px); top: var(--proof-stet-top, 256px); font-size: 16px; transform: rotate(-6deg); }
 
 @media (max-width: 699px) {
-  /* phones: the unit buttons and the headline fill the space under the unit, so the pencil note sits this out too */
+  /* phones: the headline fills the space under the unit, so the pencil note sits this out too */
   .proof-slug, .proof-follow { display: none; }
-  .proof .crop.tl, .proof .crop.tr, .proof .crop.bl, .proof .crop.br { transform: scale(0.6); }
+  .proof .crop.bl, .proof .crop.br { transform: scale(0.6); }
 }
 
 /* draw-on, once */

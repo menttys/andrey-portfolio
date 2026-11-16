@@ -6,9 +6,14 @@
 // scene is torn down and a still image of the devices takes the canvas's place in the stage.
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { usePhoneLayout } from './usePhoneLayout';
 
 export default function DeviceScene() {
   const [fallback, setFallback] = useState<{ stage: HTMLElement; label: string } | null>(null);
+
+  // phones get a different unit from wide screens: crossing the breakpoint (a rotated phone) rebuilds the scene on
+  // the fresh canvas HeroCanvas mounts for it
+  const layout = usePhoneLayout();
 
   useEffect(() => {
     const ctl = new AbortController();
@@ -25,7 +30,7 @@ export default function DeviceScene() {
       .then(({ startScene }) => (ctl.signal.aborted ? undefined : startScene(ctl.signal, { onFail: fail })))
       .catch(fail);
     return () => ctl.abort();
-  }, []);
+  }, [layout]);
 
   if (!fallback) return null;
   // the images are the canvas itself, transparent, at its own framing (the stage's 2.1:1, or 1.5:1 on phones)

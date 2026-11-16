@@ -7,7 +7,7 @@
      11.26 circled, "stet ✓". They follow the unit through a `proof:anchor` event from the scene (its box in document
      px; the last one is on window.__proofAnchor), so they scroll with it and keep the same gap at every width.
      Under 1100px wide, or where the vertical note wouldn't fit, it runs sideways just under the unit instead.
-     Under 700px (phones) it is hidden, like the slug: the unit buttons and the headline leave no room under the unit.
+     Under 700px (phones) it is hidden, like the slug: the headline leaves no room under the unit.
    Everything is SVG/DOM on the paper: no WebGL, no extra GPU load. Strokes draw on once (skipped with reduced motion).
    SHEET follows the section knob through a `proof:sheet` event ({ detail: index }) sent from the scene. */
 import { useEffect, useRef, useState } from 'react';
@@ -116,7 +116,7 @@ export default function ProofMarks() {
   return (
     <>
     <div className="proof" aria-hidden="true">
-      <i className="crop tl" /><i className="crop tr" /><i className="crop bl" /><i className="crop br" />
+      <i className="crop bl" /><i className="crop br" />
 
       <div className="proof-slug">
         <b ref={portRef}>{LABEL}</b><b> / {MONTH}</b>
