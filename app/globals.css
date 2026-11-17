@@ -359,6 +359,11 @@ html.knob-drag * {
   text-wrap: balance;
   margin-top: clamp(-30px, -2vw, -8px);
 }
+@media (max-width: 760px) {
+  .headline {
+    margin-top: 20px;
+  }
+}
 .headline .w {
   color: var(--fog);
 }

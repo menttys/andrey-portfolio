@@ -3,7 +3,7 @@
    - Crop marks in the four corners (fixed to the viewport).
    - A printed slug down the LEFT edge: PORTFOLIO / 11.26 · ANDREY® · PROOF 01 · APPROVED ✓ · SHEET n/6 · R G B.
      Hidden under 700px wide. A pencil bracket marks PORTFOLIO.
-   - Pencil notes beside the green unit: "Portfolio / 11.26" written vertically with a bracket the unit's height,
+   - Pencil notes beside the green unit: "Approved / 11.26" written vertically with a bracket the unit's height,
      11.26 circled, "stet ✓". They follow the unit through a `proof:anchor` event from the scene (its box in document
      px; the last one is on window.__proofAnchor), so they scroll with it and keep the same gap at every width.
      Under 1100px wide, or where the vertical note wouldn't fit, it runs sideways just under the unit instead.
@@ -143,7 +143,7 @@ export default function ProofMarks() {
 
     <div ref={followRef} className="proof-follow" aria-hidden="true">
       <div ref={noteRef} className={`proof-note ${wide ? 'v' : 'h'}`}>
-        Portfolio / <span ref={yearRef}>{MONTH}</span>
+        Approved / <span ref={yearRef}>{MONTH}</span>
       </div>
       <div className={`proof-stet ${wide ? 'v' : 'h'}`}>stet ✓</div>
       <svg className="proof-pencil">
