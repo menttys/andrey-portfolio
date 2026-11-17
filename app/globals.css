@@ -572,6 +572,56 @@ footer {
 .job.quiet h3 {
   color: var(--graphite);
 }
+/* the older entries behind "See more" (components/Experience.tsx): rows 0fr -> 1fr slides to the real height */
+.jobs-more {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.45s ease;
+}
+.jobs-more.open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.jobs-more-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.jobs-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  padding: 8px 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.jobs-toggle:hover {
+  color: var(--ink);
+}
+.jobs-toggle:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 4px;
+}
+.jobs-toggle-mark {
+  font-size: 14px;
+  line-height: 1;
+  color: var(--orange);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.jobs-toggle[aria-expanded="true"] .jobs-toggle-mark {
+  transform: rotate(45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .jobs-more,
+  .jobs-toggle-mark {
+    transition: none;
+  }
+}
 .skills {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
