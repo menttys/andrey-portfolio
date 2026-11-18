@@ -887,3 +887,288 @@ footer a:hover {
 #paper-light.on {
   opacity: 1;
 }
+
+/* projects (components/Projects.tsx): index rows like the work list; pressing a row opens its image strip */
+.proj {
+  border-bottom: 1px solid var(--line);
+}
+.proj-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) minmax(0, 0.7fr) auto;
+  align-items: center;
+  gap: 24px;
+  padding-block: 22px;
+  cursor: pointer;
+}
+.proj .num {
+  font-size: clamp(56px, 8vw, 128px);
+}
+.proj-row:hover .num,
+.proj.open .num {
+  color: var(--orange);
+}
+.proj h3 {
+  margin: 0 0 6px;
+  font-size: clamp(22px, 2.2vw, 32px);
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  line-height: 1.1;
+}
+.proj-toggle {
+  all: unset;
+  cursor: pointer;
+}
+.proj-toggle:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 4px;
+}
+.proj p {
+  margin: 0;
+  color: var(--graphite);
+  font-size: 16px;
+  max-width: 46ch;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.chips li {
+  font: 500 10.5px var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid #a9a9a8;
+  border-radius: 999px;
+  padding: 5px 10px;
+  line-height: 1.3;
+}
+.proj-mark {
+  width: 1ch; /* keeps the columns lined up on rows without images (no mark) */
+  font: 18px var(--mono);
+  color: var(--orange);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.proj.open .proj-mark {
+  transform: rotate(45deg);
+}
+/* same 0fr -> 1fr opening as the Experience "See more" */
+.proj-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.45s ease;
+}
+.proj.open .proj-panel {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.proj-panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.proj-gallery {
+  padding-bottom: 28px;
+}
+/* the strip bleeds off the right edge so the next image peeks in */
+.proj-strip {
+  display: flex;
+  gap: 16px;
+  margin: 0 calc(-1 * var(--gut)) 0 0;
+  padding: 4px var(--gut) 4px 0;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 0;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.proj-strip::-webkit-scrollbar {
+  display: none;
+}
+.proj-strip:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+.proj-strip li {
+  flex: 0 0 min(40%, 560px);
+  scroll-snap-align: start;
+}
+.proj-strip img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 14px;
+}
+.proj-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+.proj-nav .mono {
+  margin-left: 10px;
+}
+.proj-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: none;
+  color: var(--ink);
+  font: 16px var(--mono);
+  cursor: pointer;
+}
+.proj-btn.solid {
+  background: var(--ink);
+  color: var(--paper);
+}
+.proj-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.proj-btn:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+}
+@media (max-width: 760px) {
+  .proj-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 8px 18px;
+  }
+  .proj .num {
+    font-size: 48px;
+    grid-row: span 2;
+    align-self: start;
+  }
+  .proj-row .meta.mono {
+    grid-column: 2;
+  }
+  .proj-mark {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: start;
+    padding-top: 6px;
+  }
+  .proj-strip li {
+    flex-basis: 84%;
+  }
+  /* swiping is the way on a phone; the counter stays */
+  .proj-nav .proj-btn {
+    display: none;
+  }
+  .proj-nav .mono {
+    margin-left: 0;
+  }
+}
+.proj.still .proj-row {
+  cursor: default;
+}
+.proj.still .proj-row:hover .num {
+  color: var(--fog);
+}
+.proj-zoom {
+  all: unset;
+  display: block;
+  cursor: zoom-in;
+  border-radius: 14px;
+}
+.proj-zoom:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+}
+.proj-zoom img {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.proj-zoom:hover img {
+  transform: scale(1.015);
+}
+
+/* the zoomed image (Lightbox in components/Projects.tsx): a modal <dialog> over a dark veil */
+html.lightbox-open {
+  overflow: hidden;
+}
+.lightbox {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--paper);
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+.lightbox:not([open]) {
+  display: none;
+}
+.lightbox::backdrop {
+  background: rgba(11, 12, 16, 0.88);
+}
+.lightbox[open] {
+  animation: lightbox-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+.lightbox-stage {
+  display: grid;
+  place-items: center;
+  padding: max(16px, 3vw) max(16px, 3vw) 0;
+  min-height: 0;
+  cursor: zoom-out;
+}
+.lightbox-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  border-radius: 12px;
+  cursor: default;
+}
+.lightbox-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px max(16px, 3vw) max(16px, env(safe-area-inset-bottom, 0px));
+}
+.lightbox-bar .mono {
+  color: #b3b3b2;
+}
+.lightbox-btns {
+  display: flex;
+  gap: 10px;
+}
+.proj-btn.light {
+  border-color: var(--paper);
+  color: var(--paper);
+}
+@media (max-width: 760px) {
+  .lightbox-bar {
+    flex-direction: column-reverse;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .proj-panel,
+  .proj-mark,
+  .proj .num,
+  .proj-zoom img {
+    transition: none;
+  }
+  .lightbox[open] {
+    animation: none;
+  }
+}

@@ -1,6 +1,7 @@
 import Header from '@/components/Header';
 import Intro from '@/components/Intro';
 import Work from '@/components/Work';
+import Projects from '@/components/Projects';
 import Experience from '@/components/Experience';
 import Contributions from '@/components/Contributions';
 import Skills from '@/components/Skills';
@@ -25,6 +26,7 @@ export default function Home() {
         <div className="flow" id="flow">
           <Intro />
           <Work />
+          <Projects />
           <Experience />
           <Contributions />
           <Skills />

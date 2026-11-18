@@ -37,3 +37,54 @@ export const SKILLS = [
   { num: '03', name: 'Cloud & AI', text: 'AWS and serverless, LLM integration, AI agents, AI coding tools. AWS Developer Associate, AWS Cloud Practitioner' },
   { num: '04', name: 'Languages', text: 'Portuguese (native), English (proficient), Italian and Spanish (conversational). Brazilian, Italian and British' },
 ];
+
+// Personal projects (components/Projects.tsx). Export each project's images as 3:2 (3840 × 2560 or similar), convert
+// them to WebP (cwebp -q 80 -resize 2400 1600) and drop them in public/projects/<slug>/ as 01.webp, 02.webp, …;
+// the first one is the cover. A project with no images yet shows as a plain row that doesn't open.
+export type Project = {
+  slug: string;
+  title: string;
+  kind: string;
+  year: string;
+  text: string;
+  tech: string[];
+  images: { src: string; alt: string }[];
+};
+
+const images = (slug: string, alts: string[]) =>
+  alts.map((alt, i) => ({ src: `/projects/${slug}/${String(i + 1).padStart(2, '0')}.webp`, alt }));
+
+export const PROJECTS: Project[] = [
+  {
+    slug: 'super-trunfo',
+    title: 'Super Trunfo',
+    kind: 'Mobile game · iOS / Android',
+    year: '2026',
+    text: 'A two-player Top Trumps game with no server: each game is a peer-to-peer vault synced between the two phones. Pair with a code, build one shared deck, then pick a card each round and reveal who wins.',
+    tech: ['React Native', 'Expo', 'Pear / Bare', 'Autopass', 'Hyperswarm', 'Reanimated'],
+    images: images('super-trunfo', [
+      'Super Trunfo cover: “Build a deck. Pick a stat. Win the round.” beside three phones',
+      'Three phones: the deck, a round result and the final score',
+      'How it plays: five screens from new game to final score',
+      'A single phone showing a round result, 91 beats 78',
+      'An isometric wall of Super Trunfo screens',
+      'Five screens on an orange gradient',
+    ]),
+  },
+  {
+    slug: 'praeparo',
+    title: 'Praeparo',
+    kind: 'Workout tracker · iOS / Android',
+    year: '2024 — 26',
+    text: 'Build training programs from a catalogue of about 1,300 exercises, run them set by set with a rest timer, and share or clone workouts with friends. Works offline, in English, Spanish and Portuguese.',
+    tech: ['React Native', 'Expo', 'TypeScript', 'Firebase', 'Zustand + MMKV', 'Reanimated + Skia'],
+    images: images('praeparo', [
+      'Praeparo cover: “Plan it. Time it. Train it.” beside the library, programs and timer screens',
+      'Three phones on a dark glow showing Praeparo screens',
+      'How it works: five screens from creating a program to training',
+      'The Praeparo splash screen: “Train. Track. Improve.”',
+      'An isometric wall of Praeparo screens',
+      'A showcase grid of Praeparo screens',
+    ]),
+  },
+];

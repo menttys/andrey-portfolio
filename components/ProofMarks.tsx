@@ -1,7 +1,7 @@
 'use client';
 /* Print-proof furniture around the page, replacing the old "Portfolio / 11.26" header label.
    - Crop marks in the four corners (fixed to the viewport).
-   - A printed slug down the LEFT edge: PORTFOLIO / 11.26 · ANDREY® · PROOF 01 · APPROVED ✓ · SHEET n/6 · R G B.
+   - A printed slug down the LEFT edge: PORTFOLIO / 11.26 · ANDREY® · PROOF 01 · APPROVED ✓ · SHEET n/7 · R G B.
      Hidden under 700px wide. A pencil bracket marks PORTFOLIO.
    - Pencil notes beside the green unit: "Approved / 11.26" written vertically with a bracket the unit's height,
      11.26 circled, "stet ✓". They follow the unit through a `proof:anchor` event from the scene (its box in document
@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 
 const LABEL = 'PORTFOLIO';
 const MONTH = '11.26';
-const SHEETS = 6;
+const SHEETS = 7; // one per section knob stop (lib/scene/sections.js SECTION_IDS)
 
 // a seeded wobble so the pencil lines look drawn but stay the same on every load
 function wobble(seed = 17) { let s = seed; return () => { s = (s * 9301 + 49297) % 233280; return s / 233280 - 0.5; }; }
