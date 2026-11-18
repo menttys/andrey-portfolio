@@ -31,9 +31,10 @@ function Lightbox({ p, index, onIndex, onClose }: { p: Project; index: number; o
     if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
   };
-  const onTouchStart = (e: TouchEvent) => { touchX.current = e.touches[0].clientX; };
+  // one finger only: a two-finger pinch (zooming into the image) must not page to the next one
+  const onTouchStart = (e: TouchEvent) => { touchX.current = e.touches.length === 1 ? e.touches[0].clientX : null; };
   const onTouchEnd = (e: TouchEvent) => {
-    if (touchX.current === null) return;
+    if (touchX.current === null || e.touches.length > 0) { touchX.current = null; return; }
     const dx = e.changedTouches[0].clientX - touchX.current;
     touchX.current = null;
     if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
